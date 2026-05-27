@@ -1,0 +1,30 @@
+@PACKAGE_INIT@
+
+# topo-lang CMake package config.
+#
+# Consumers do:
+#     find_package(topo-lang CONFIG REQUIRED)
+#     target_link_libraries(<tgt> PRIVATE topo::lang::TopoLang)
+#
+# topo-lang's TopoLang lib PUBLIC-depends on topo::core::TopoCheck +
+# topo::core::TopoSema + topo::core::TopoLSPBridge (the headers
+# LanguagePlugin.h transitively pulls in). find_dependency(topo-core)
+# re-exposes those imported targets.
+
+include(CMakeFindDependencyMacro)
+
+# Guard against the topo-core ↔ topo-lang find_dependency cycle.
+# topo-coreConfig sets _topo_core_loading=TRUE while it is mid-load and
+# conditionally finds topo-lang back; if we are running because of that
+# call, skip find_dependency(topo-core) — we are already inside one.
+# Otherwise (standalone find_package(topo-lang) by a downstream
+# consumer), pull topo-core normally.
+set(_topo_lang_loading TRUE)
+if(NOT _topo_core_loading)
+    find_dependency(topo-core CONFIG)
+endif()
+unset(_topo_lang_loading)
+
+include("${CMAKE_CURRENT_LIST_DIR}/topo-langTargets.cmake")
+
+check_required_components(topo-lang)
