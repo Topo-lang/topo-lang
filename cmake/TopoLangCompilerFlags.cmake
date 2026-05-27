@@ -45,5 +45,8 @@ endfunction()
 # PCH stub: no-op in standalone (lib/CMakeLists doesn't currently call it
 # but keep the symbol available for future converts from the monorepo
 # topo_apply_std_pch pattern).
-function(topo_apply_std_pch target)
-endfunction()
+if(NOT COMMAND topo_apply_std_pch)
+    function(topo_apply_std_pch target)
+        # standalone no-op
+    endfunction()
+endif()

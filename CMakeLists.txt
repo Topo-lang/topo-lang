@@ -16,7 +16,12 @@ include(TopoLangCompilerFlags)
 # ── Upstream Topo packages ────────────────────────────
 # topo-core exports topo::core::TopoCheck, TopoSema, TopoLSPBridge — the
 # PUBLIC dependency closure of TopoLang.
-find_package(topo-core CONFIG REQUIRED)
+# Embedded under the meta-repo: topo::core::TopoBasic is already
+# defined as an ALIAS via add_subdirectory(topo-core); skip find_package
+# in that case. Standalone falls through to find_package as today.
+if(NOT TARGET topo::core::TopoBasic)
+    find_package(topo-core CONFIG REQUIRED)
+endif()
 
 # ── External dependencies ─────────────────────────────
 find_package(nlohmann_json CONFIG REQUIRED)
@@ -26,7 +31,7 @@ add_subdirectory(lib)
 
 # ── Tests (off by default in standalone mode) ─────────
 option(TOPO_LANG_BUILD_TESTS "Build topo-lang tests" OFF)
-if(TOPO_LANG_BUILD_TESTS AND PROJECT_IS_TOP_LEVEL)
+if(TOPO_LANG_BUILD_TESTS AND (PROJECT_IS_TOP_LEVEL OR TOPO_META_DRIVING_TESTS))
     enable_testing()
     include(FetchContent)
     FetchContent_Declare(googletest
