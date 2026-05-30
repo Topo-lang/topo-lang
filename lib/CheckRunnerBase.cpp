@@ -113,8 +113,8 @@ check::CheckResult CheckRunnerBase::runContainment(
 
     // Probe the symbol extractor as an "extractor health" signal. If symbols can
     // be parsed but only the unsafe-pattern-driven import and callsite extractors
-    // are empty, the file is just clean code, not a failed extraction.
-    // See checker-empty-extraction-error-misclassifies-clean-fixtures.md.
+    // are empty, the file is just clean code, not a failed extraction — so the
+    // empty-extraction error must not misclassify clean fixtures as failures.
     std::vector<check::HostSymbol> hostSymbols;
     auto se = provider.createSymbolExtractor();
     if (se) {

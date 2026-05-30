@@ -182,9 +182,9 @@ TEST(CheckRunnerBaseTest, CheckRunnerBaseIsConstructible) {
 }
 
 // Regression: when ALL extractors run successfully but return zero results,
-// runContainment must report Severity::Error rather than passing silently.
-// Mirrors the runCompleteness empty-extraction guard (issue
-// checker-runcontainment-empty-extraction-silent-warn).
+// runContainment must report Severity::Error rather than passing silently
+// (the empty-extraction silent-warn guard). Mirrors the runCompleteness
+// empty-extraction guard.
 TEST(CheckRunnerBaseTest, ContainmentEmptyExtractionReportsError) {
     SymbolTable symbols;
     std::vector<std::string> sourceFiles{"fake1.cpp", "fake2.cpp"};
@@ -210,8 +210,8 @@ TEST(CheckRunnerBaseTest, ContainmentEmptyExtractionReportsError) {
 
 // Regression: when SymbolExtractor returns hostSymbols but Import/CallSite
 // extractors return empty, the file is just clean code and the guard must
-// NOT fire. Validates the fix for
-// checker-empty-extraction-error-misclassifies-clean-fixtures.
+// NOT fire. Validates that the empty-extraction error no longer
+// misclassifies clean fixtures as extraction failures.
 class CleanCodeProvider : public LanguageAnalysisProvider {
 public:
     std::unique_ptr<SymbolExtractor> createSymbolExtractor() override {

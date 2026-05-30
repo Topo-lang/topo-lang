@@ -3,8 +3,8 @@
 Standard directory layout for `topo-lang-<lang>/` packages.
 
 Each package's second-level directories are named after **which `topo` tool they
-serve** (`topo-<tool>/`), so component ownership is explicit. This mirrors the
-authoritative table in the project root `CLAUDE.md` (§语言支持包).
+serve** (`topo-<tool>/`), so component ownership is explicit. This tool-ownership
+naming is the canonical layout convention for every `topo-lang-<lang>/` package.
 
 ## Structure
 
